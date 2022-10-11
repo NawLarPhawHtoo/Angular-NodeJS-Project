@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2 class="h2">Users List</h2>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Birthday</th>
+          <th scope="col">Gender</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Address</th>
+          <th scope="col">Profile</th>
+          <th class="text-center" scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- <tr *ngFor="let user of users let i = index"> -->
+          <tr>
+          <th>{{users._id}}</th>
+          <td>{{users.name}}</td>
+          <td>{{users.email}}</td>
+          <td>{{users.birthday}}</td>
+          <td>{{users.gender}}</td>
+          <td>{{users.phone}}</td>
+          <td>{{users.address}}</td>
+          <td>{{users.profile}}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-primary" routerLink="/user-edit/{{users._id}}">Edit</button>
+            <!-- <button class="btn btn-sm btn-danger" (click)="deleteUser(users._id,i)">Delete</button> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
