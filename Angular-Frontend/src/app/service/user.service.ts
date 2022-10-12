@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../model/user';
@@ -16,18 +16,18 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  createUser(data: User): Observable<any>{
+  getUsers() {
+    return this.httpClient.get(`${this.REST_API}`);
+  }
+
+  createUser(data:User|any): Observable<any>{
     let API_URL = `${this.REST_API}/create`;
     return this.httpClient.post(API_URL, data).pipe(catchError(this.handleError));
 
   }
 
-  GetUsers() {
-    return this.httpClient.get(`${this.REST_API}`);
-  }
-
    // Get single object
-   GetUser(id: any): Observable<any> {
+   getUser(id: any): Observable<any> {
     let API_URL = `${this.REST_API}/read/${id}`;
     return this.httpClient.post(API_URL, { headers: this.httpHeaders }).pipe(
       map((res: any) => {
@@ -38,12 +38,18 @@ export class UserService {
   }
 
   // Update
-  updateUser(id: any, data: any): Observable<any> {
-    let API_URL = `${this.REST_API}/update/${id}`;
-    return this.httpClient
-      .put(API_URL, data, { headers: this.httpHeaders })
-      .pipe(catchError(this.handleError));
+  // updateUser(id: any, data: any): Observable<any> {
+  //   let API_URL = `${this.REST_API}/update/${id}`;
+  //   return this.httpClient
+  //     .put(API_URL, data, { headers: this.httpHeaders })
+  //     .pipe(catchError(this.handleError));
+  // }
+
+  updateUser(id: string, data: any) {
+    return this.httpClient.put(`${this.REST_API}/update/${id}`, data)
+      .pipe(retry(3), catchError(this.handleError));
   }
+
 
   // Delete
   deleteUser(id: any): Observable<any> {

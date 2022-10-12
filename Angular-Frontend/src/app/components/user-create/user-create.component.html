@@ -1,93 +1,71 @@
-<div class="row justify-content-center">
-  <div class="col-md-4 register-user">
-    <div class="card-body">
-      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" class="form-control" formControlName="name" />
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['name'].errors?.['required']"
-          >
-            Name is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input class="form-control" type="text" formControlName="email" />
-          <!-- error -->
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['email'].errors?.['required']"
-          >
-            Enter your email.
-          </div>
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['email'].errors?.['pattern']"
-          >
-            Enter valid email.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" formControlName="password" />
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['password'].errors?.['required']"
-          >
-           Password is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="gender">Gender</label>
-          <input type="text" class="form-control" formControlName="gender" />
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['gender'].errors?.['required']"
-          >
-           Gender is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="birthday">Birthday</label>
-          <input type="text" class="form-control" formControlName="birthday" />
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['birthday'].errors?.['required']"
-          >
-           Birthday is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="phone">Phone</label>
-          <input type="text" class="form-control" formControlName="phone" />
-          <div
-            class="invalid-feedback"
-            *ngIf="submitted && myForm['phone'].errors?.['required']"
-          >
-            Phone is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="address">Address</label>
-          <input type="text" class="form-control" formControlName="address" />
-        </div>
-        <div class="form-group">
-          <label for="profile">Profile</label>
-          <input type="text" class="form-control" formControlName="profile" />
-        </div>
-        <div class="form-group">
-          <label for="type">Type</label>
-          <input type="text" class="form-control" formControlName="type" />
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-success btn-lg btn-block" type="submit">
-           Add User
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>New User</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form action="post" [formGroup]="formData" (ngSubmit)="onClickAddUser()">
+      <label>Profile</label>
+      <div *ngIf="confirmView==false" class="profileinput">
+        <input #file type="file" (change)="imageUpload($event)" formControlName="profile" accept="image/*"
+          maxFileSize=2000000>
+      </div>
+      <div *ngIf="profileImage">
+        <img [src]="profileImage" class="profileimg">
+      </div>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput class="form-control" formControlName="name" required>
+        <mat-error *ngIf="myForm['name'].hasError('required')">Please enter your name</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>User Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let selectOption of typeOption" [value]="selectOption.enum">
+            {{ selectOption.enum }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Phone</mat-label>
+        <input type="text" matInput class="form-control" formControlName="phone" required>
+        <mat-error *ngIf="myForm['phone'].hasError('required')">Please enter your phone number</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Email</mat-label>
+        <input type="text" matInput class="form-control" formControlName="email" required>
+        <mat-error *ngIf="myForm['email'].hasError('required')">Please enter your email</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Password</mat-label>
+        <input type="text" matInput class="form-control" formControlName="password" required>
+        <mat-error *ngIf="myForm['password'].hasError('required')">Please enter your password</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Confirm your Password</mat-label>
+        <input type="text" matInput class="form-control" formControlName="confirmPwd" required>
+        <mat-error *ngIf="myForm['confirmPwd'].hasError('required')">Please confirm your password</mat-error>
+        <mat-error *ngIf="myForm['confirmPwd'].hasError('mustMatch')">Password must be match</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input matInput [matDatepicker]="picker" [max]="today"
+          placeholder="Choose your Birthday" formControlName="birthday">
+          <mat-hint>YYYY/MM/DD</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Gender</mat-label>
+        <input type="text" matInput class="form-control" formControlName="gender">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Address</mat-label>
+        <input type="text" matInput class="form-control" formControlName="address">
+      </mat-form-field>
+     
+      <div class="btn-gp">
+        <button mat-raised-button type="button" color="warn" class="full-width" (click)="onClear()"> {{ confirmView === true ? 'Cancel' : 'Clear' }} </button>
+        <button mat-raised-button color="primary" class="add-user-btn" [disabled]="formData.invalid"> {{ confirmView === true ? 'Confirm' : 'Register' }} </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserService = exports.updateUserService = exports.createUserService = exports.findUserService = exports.getUserService = void 0;
+const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,7 +28,7 @@ const getUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             res.json({
                 message: "Users Fetched",
                 data: users,
-                status: 1
+                status: 1,
             });
         }
     }
@@ -40,12 +41,12 @@ const findUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     try {
         const user = yield User_1.default.findById(req.params.id);
         if (!user) {
-            const error = Error('Not Found');
+            const error = Error("Not Found");
             error.statusCode = 401;
         }
         res.json({
             data: user,
-            status: 1
+            status: 1,
         });
     }
     catch (err) {
@@ -55,6 +56,17 @@ const findUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.findUserService = findUserService;
 const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const errors = (0, express_validator_1.validationResult)(req.body);
+        if (!errors.isEmpty()) {
+            const error = new Error("Validation failed!");
+            error.data = errors.array();
+            error.statusCode = 401;
+            throw error;
+        }
+        let profile = req.body.profile;
+        if (req.file) {
+            profile = req.file.path.replace("\\", "/");
+        }
         const userTo = {
             name: req.body.name,
             email: req.body.email,
@@ -64,15 +76,15 @@ const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             gender: req.body.gender,
             address: req.body.address,
             type: req.body.type,
-            profile: req.body.profile,
-            created_user_id: req.body.created_user_id
+            profile: profile,
+            created_user_id: req.body.created_user_id,
         };
         const user = new User_1.default(userTo);
         const result = yield user.save();
         res.status(201).json({
             message: "Created user successfully!",
             data: result,
-            status: 1
+            status: 1,
         });
     }
     catch (err) {
@@ -84,8 +96,17 @@ const updateUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     try {
         const user = yield User_1.default.findByIdAndUpdate(req.params.id);
         if (!user) {
-            const error = Error('Not Found');
+            const error = Error("Not Found");
             error.statusCode = 401;
+        }
+        let profile = req.body.profile;
+        if (req.file) {
+            {
+                profile = req.file.path.replace("\\", "/");
+            }
+            if (profile) {
+                user.profile = profile;
+            }
         }
         user.name = req.body.name;
         user.email = req.body.email;
@@ -100,7 +121,7 @@ const updateUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.json({
             message: "Updated user successfully!",
             data: result,
-            status: 1
+            status: 1,
         });
     }
     catch (err) {
@@ -112,13 +133,13 @@ const deleteUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     try {
         const user = yield User_1.default.findByIdAndRemove(req.params.id);
         if (!user) {
-            const error = Error('Not Found');
+            const error = Error("Not Found");
             error.statusCode = 401;
         }
         res.json({
             message: "User deleted successfully!",
             data: user,
-            status: 1
+            status: 1,
         });
     }
     catch (err) {

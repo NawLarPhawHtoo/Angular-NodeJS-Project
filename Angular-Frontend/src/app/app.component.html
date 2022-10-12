@@ -1,16 +1,38 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <!--  <span>HOME</span> -->
-     <span><a href="/">HOME</a></span>
-     <span class="spacer"></span>
-     <a mat-button routerLink="/register">Register</a>
-     <a mat-button routerLink="/login">Login</a>
-  </mat-toolbar-row>
-</mat-toolbar>
-<nav>
-  <a routerLinkActive="active" routerLink="/user-list">View Users</a>
-  <a routerLinkActive="active" routerLink="/create-user">Add User</a>
-</nav>
-
-<router-outlet></router-outlet>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Happy Cinema</title>
+</head>
+<body>
+   <mat-toolbar>
+      <a routerLink="/home">Angular + Node JS + MongoDB  Project</a>
+      <span class="example-spacer"></span>
+      <button mat-button color="primary">
+         <mat-icon class="mat-18">people_alt</mat-icon>
+         Users
+      </button>
+      <button mat-button color="primary">
+         <mat-icon class="mat-18">account_circle</mat-icon>
+      </button>
+      <button mat-button color="warn" >
+         <mat-icon class="mat-18">login</mat-icon>
+         Log in
+      </button>
+      <ng-template mat-button color="primary" isLoggedin>
+         <button mat-button color="primary" class="nav-link" routerLink="/logout">
+            <mat-icon class="mat-18">logout</mat-icon>
+           Logout
+         </button>
+      </ng-template>
+      <button mat-button color="accent" routerLink="/signup">
+         <mat-icon class="mat-18">person_add_alt</mat-icon>
+         Sign Up
+      </button>
+   </mat-toolbar>
+   
+   <router-outlet></router-outlet>
+</body>
+</html>

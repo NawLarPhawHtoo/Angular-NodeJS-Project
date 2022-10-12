@@ -1,4 +1,14 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 .spacer {
   flex: 1 1 auto;
 }
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+

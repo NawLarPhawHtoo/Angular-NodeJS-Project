@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +26,9 @@ import {MatListModule} from  '@angular/material/list';
 import {MatRadioModule} from '@angular/material/radio';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table' ;
+import { MatDialog,MatDialogRef,MatDialogModule } from '@angular/material/dialog';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 @NgModule({
@@ -39,6 +43,14 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -52,11 +64,20 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     MatListModule,
     MatRadioModule,
-    MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    CommonModule,
+    MatTableModule,
+    MatDialogModule,
+    MatPaginatorModule
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

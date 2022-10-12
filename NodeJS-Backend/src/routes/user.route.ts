@@ -9,10 +9,10 @@ router
 
 router
 .route("/create")
-.post(createUser)
+.post(createUser)     
 
 router
-.route("/read/:id")
+.route("/read/:id") 
 .post(findUser)
 
 router

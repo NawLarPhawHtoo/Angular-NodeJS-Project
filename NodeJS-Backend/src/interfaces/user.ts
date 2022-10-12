@@ -7,6 +7,6 @@ export interface UserCreate{
   gender: string;
   address: string;
   type: string;
-  profile:string;
+  profile?:string;
   created_user_id:any
 }
