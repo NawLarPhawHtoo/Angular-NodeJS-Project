@@ -76,13 +76,15 @@ export const createUserService = async (
       gender: req.body.gender,
       address: req.body.address,
       type: req.body.type,
+      skill: req.body.skill,
+      experience: req.body.experience,
       profile: profile,
       created_user_id: req.body.created_user_id,
     };
     const user = new User(userTo);
     const result = await user.save();
     res.status(201).json({
-      message: "Created user successfully!",
+      message: "Created User successfully!",
       data: result,
       status: 1,
     });
@@ -120,6 +122,9 @@ export const updateUserService = async (
     user.gender = req.body.gender;
     user.address = req.body.address;
     user.type = req.body.type;
+    user.skill = req.body.skill;
+    user.experience = req.body.experience;
+    user.profile = profile;
     user.created_user_id = req.body.created_user_id;
     user.updated_user_id = req.body.updated_user_id;
 

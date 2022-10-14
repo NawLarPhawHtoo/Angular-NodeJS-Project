@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserService } from 'src/app/service/user.service';
+import { UserService } from 'src/app/services/user.service';
 import { FormControl,Validators,FormGroup } from '@angular/forms';
 
 export const MY_DATE_FORMAT = {
@@ -46,8 +46,8 @@ export class UserEditComponent implements OnInit {
 
   profile = new FormControl('', Validators.required);
   name = new FormControl('', Validators.required);
-  type = new FormControl('', Validators.required);
-  phone = new FormControl('', Validators.required);
+  type = new FormControl('');
+  phone = new FormControl('');
   email = new FormControl('', [Validators.required, Validators.email]);
   birthday = new FormControl('');
   gender=new FormControl('');
@@ -55,6 +55,8 @@ export class UserEditComponent implements OnInit {
   isProfile = localStorage.getItem("isProfile");
 
   formData!: FormGroup;
+  firstFormGroup!: FormGroup;  
+  secondFormGroup!: FormGroup;
 
 
   ngOnInit(): void {
@@ -62,8 +64,8 @@ export class UserEditComponent implements OnInit {
     this.formData = new FormGroup({
       profile: new FormControl(''),
       name: new FormControl(this.data.name, Validators.required),
-      type: new FormControl(this.data.type, Validators.required),
-      phone: new FormControl(this.data.phone, Validators.required),
+      type: new FormControl(this.data.type),
+      phone: new FormControl(this.data.phone),
       email: new FormControl(this.data.email, [Validators.required, Validators.email]),
       birthday: new FormControl(this.data.birthday),
       gender: new FormControl(this.data.gender),

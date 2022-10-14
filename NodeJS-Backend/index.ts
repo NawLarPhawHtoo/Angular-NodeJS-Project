@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express, { application, Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import multer, { FileFilterCallback } from 'multer';
 import { v4} from 'uuid';
 import userRoute from './src/routes/user.route';
+import authRoute from './src/routes/auth.route';
 
 
 dotenv.config();
@@ -50,7 +51,10 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(multer({ storage: fileStorage, fileFilter }).single("profile"));
 app.use("/apiuploads", express.static("apiuploads"));
 app.use('/',express.static(path.join(__dirname,'public')));
+
+
 app.use('/api/users',userRoute);
+app.use('/api',authRoute);
 
 app.get('/', (req: Request, res: Response) => {
   res.send("/Hello Welcome");

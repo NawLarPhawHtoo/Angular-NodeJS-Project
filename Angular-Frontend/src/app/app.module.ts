@@ -10,11 +10,10 @@ import { UserCreateComponent } from './components/user-create/user-create.compon
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 
-import { UserService } from './service/user.service';
+import { UserService } from './services/user.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar'; 
 import { MatButtonModule } from '@angular/material/button';
-import { RegistrationComponent } from './pages/registration/registration.component';
 import { LoginComponent } from './pages/login/login.component';
 import {MatDatepickerModule} from  '@angular/material/datepicker';
 import {MatIconModule} from '@angular/material/icon';
@@ -29,6 +28,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table' ;
 import { MatDialog,MatDialogRef,MatDialogModule } from '@angular/material/dialog';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { UserDeleteConfirmDialogComponent } from './components/user-delete-confirm-dialog/user-delete-confirm-dialog.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { SignupSuccessSnackbarComponent } from './components/signup-success-snackbar/signup-success-snackbar.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
 
 
 @NgModule({
@@ -37,8 +43,11 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     UserCreateComponent,
     UserEditComponent,
     UserListComponent,
-    RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    UserDeleteConfirmDialogComponent,
+    SignupComponent,
+    SignupSuccessSnackbarComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +78,10 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     CommonModule,
     MatTableModule,
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatStepperModule
   ],
   providers: [
     UserService,

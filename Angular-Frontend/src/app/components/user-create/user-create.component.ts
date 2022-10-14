@@ -1,7 +1,12 @@
-import { Component, OnInit,NgZone, Inject } from '@angular/core';
-import { UserService } from 'src/app/service/user.service';
-import { FormGroup,FormBuilder, Validators, FormControl} from '@angular/forms';
-import { MatDialogRef, MatDialog} from '@angular/material/dialog';
+import { Component, OnInit, NgZone, Inject } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { UserListComponent } from '../user-list/user-list.component';
 
@@ -13,32 +18,34 @@ export const MY_DATE_FORMAT = {
     dateInput: 'YYYY/MM/DD',
     monthYearLabel: 'MMMM YYYY',
     dateAllyLabel: 'LL',
-    monthYearAllyLabel: 'MMMM YYYY'
+    monthYearAllyLabel: 'MMMM YYYY',
   },
 };
-
 
 @Component({
   selector: 'app-user-create',
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.scss'],
-  providers: [
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT }
-  ]
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT }],
 })
-
 export class UserCreateComponent implements OnInit {
- 
   constructor(
     public dialogRef: MatDialogRef<UserCreateComponent>,
-    public dialog:MatDialog,
+    public dialog: MatDialog,
     private userService: UserService,
-    public fb: FormBuilder,
-  ) { }
+    public fb: FormBuilder
+  ) {}
 
-  typeOption = [
-    { enum: 'Admin' },
-    { enum: 'User' }
+  typeOption = [{ enum: 'Admin' }, { enum: 'User' }];
+
+  gender = [{ enum: 'Male' }, { enum: 'Female' }, { enum: 'Other' }];
+
+  skills = [{ enum: 'Programming' }, { enum: 'Language' }, { enum: 'Others' }];
+
+  experiences = [
+    { enum: '1 year under' },
+    { enum: '1 year' },
+    { enum: '1 year above' },
   ];
 
   profileImage: any;
@@ -47,76 +54,140 @@ export class UserCreateComponent implements OnInit {
   today = new Date();
 
   formData!: FormGroup;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
 
   ngOnInit(): void {
-    this.formData = this.fb.group({
+    // this.formData = this.fb.group({
+    //   name: new FormControl('', Validators.required),
+    //   email: new FormControl('', [Validators.required, Validators.email]),
+    //   birthday: new FormControl(''),
+    //   gender: new FormControl(''),
+    //   type: new FormControl(''),
+    //   phone: new FormControl(''),
+    //   address: new FormControl(''),
+    //   password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    //   confirmPwd: new FormControl('', Validators.required),
+    //   profile: new FormControl(''),
+    // },
+    // );
+    this.firstFormGroup = this.fb.group({
       name: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
-      birthday: new FormControl(''),
-      gender: new FormControl(''),
-      type: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required),
-      address: new FormControl(''),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
       confirmPwd: new FormControl('', Validators.required),
       profile: new FormControl(''),
-    },
-    //   {
-    //   validator: MustMatch('password', 'confirmPwd')
-    // }
-    );
+    });
+    this.secondFormGroup = this.fb.group({
+      birthday: new FormControl(''),
+      gender: new FormControl(''),
+      type: new FormControl(''),
+      phone: new FormControl(''),
+      address: new FormControl(''),
+    });
+
+    this.thirdFormGroup = this.fb.group({
+      skill: new FormControl(''),
+      experience: new FormControl(''),
+    });
   }
 
-  public onClear() {
-    if (this.confirmView == true) {
-      this.formData.controls['name'].enable();
-      this.formData.controls['email'].enable();
-      this.formData.controls['password'].enable();
-      this.formData.controls['confirmPwd'].enable();
-      this.formData.controls['phone'].enable();
-      this.formData.controls['birthday'].enable();
-      this.formData.controls['gender'].enable();
-      this.formData.controls['address'].enable();
-      this.formData.controls['type'].enable();
-      this.formData.controls['profile'].enable();
-      this.confirmView = false;
-    } else {
-      this.formData.reset();
-    }
-  }
+  // public onClear() {
+  //   if (this.confirmView == true) {
+  //     this.firstFormGroup.controls['name'].enable();
+  //     this.firstFormGroup.controls['email'].enable();
+  //     this.firstFormGroup.controls['password'].enable();
+  //     this.firstFormGroup.controls['confirmPwd'].enable();
+  //     this.firstFormGroup.controls['profile'].enable();
+  //     this.secondFormGroup.controls['phone'].enable();
+  //     this.secondFormGroup.controls['birthday'].enable();
+  //     this.secondFormGroup.controls['gender'].enable();
+  //     this.secondFormGroup.controls['address'].enable();
+  //     this.secondFormGroup.controls['type'].enable();
+  //     this.thirdFormGroup.controls['skill'].enable();
+  //     this.thirdFormGroup.controls['experience'].enable();
+
+  ///   } else {     this.confirmView = false;
+
+  //     this.firstFormGroup.reset();
+  //     this.secondFormGroup.reset();
+  //     this.thirdFormGroup.reset();
+  //   }
+  // }
 
   onClickAddUser() {
-    if (this.confirmView === true) {
-      const formData = new FormData();
-      formData.append('name', this.formData.controls['name'].value);
-      formData.append('email', this.formData.controls['email'].value);
-      formData.append('password', this.formData.controls['password'].value);
-      formData.append('phone', this.formData.controls['phone'].value);
-      formData.append('birthday', this.formData.controls['birthday'].value);
-      formData.append('gender', this.formData.controls['gender'].value);
-      formData.append('address', this.formData.controls['address'].value);
-      formData.append('type', this.formData.controls['type'].value);
-      formData.append('profile', this.imgFile);
-  
-      this.userService.createUser(formData)
-        .subscribe(res=> {
-          this.dialogRef.close(UserCreateComponent); 
-        });
-    }
+    console.log(this.firstFormGroup.value);
+    console.log(this.secondFormGroup.value);
+    console.log(this.thirdFormGroup.value);
 
-    if (this.formData.valid) {
-      this.formData.controls['name'].disable();
-      this.formData.controls['type'].disable();
-      this.formData.controls['phone'].disable();
-      this.formData.controls['email'].disable();
-      this.formData.controls['birthday'].disable();
-      this.formData.controls['gender'].disable();
-      this.formData.controls['address'].disable();
-      this.formData.controls['password'].disable();
-      this.formData.controls['confirmPwd'].disable();
-      this.formData.controls['profile'].disable();
+    const data: any = {...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value};
+    console.log(data);
+
+    this.userService.createUser(data).subscribe(res=> {
+      this.dialogRef.close('create');
+    });
+
+
+
+    if (this.firstFormGroup.valid) {
+      this.firstFormGroup.controls['name'].disable();
+      this.firstFormGroup.controls['password'].disable();
+      this.firstFormGroup.controls['confirmPwd'].disable();
+      this.firstFormGroup.controls['profile'].disable();
       this.confirmView = true;
     }
+    if (this.secondFormGroup.valid) {
+      this.secondFormGroup.controls['phone'].disable();
+      this.secondFormGroup.controls['birthday'].disable();
+      this.secondFormGroup.controls['gender'].disable();
+      this.secondFormGroup.controls['address'].disable();
+      this.secondFormGroup.controls['type'].disable();
+      this.confirmView = true;
+    }
+    if (this.thirdFormGroup.valid) {
+      this.thirdFormGroup.controls['skill'].disable();
+      this.thirdFormGroup.controls['experience'].disable();
+      this.confirmView = true;
+    }
+  }
+
+  getInfo() {
+    const formData1 = new FormData();
+    formData1.append('profile', this.imgFile);
+    formData1.append('name', this.firstFormGroup.controls['name'].value);
+    formData1.append('email', this.firstFormGroup.controls['email'].value);
+    formData1.append(
+      'password',
+      this.firstFormGroup.controls['password'].value
+    );
+
+    this.getSecondForm();
+  }
+
+  getSecondForm() {
+    const formData2 = new FormData();
+    formData2.append('phone', this.secondFormGroup.controls['phone'].value);
+    formData2.append(
+      'birthday',
+      this.secondFormGroup.controls['birthday'].value
+    );
+    formData2.append('gender', this.secondFormGroup.controls['gender'].value);
+    formData2.append('address', this.secondFormGroup.controls['address'].value);
+    formData2.append('type', this.secondFormGroup.controls['type'].value);
+
+    this.getThirdForm();
+  }
+  getThirdForm() {
+    const formData3 = new FormData();
+    formData3.append('skill', this.thirdFormGroup.controls['skill'].value);
+    formData3.append(
+      'experience',
+      this.thirdFormGroup.controls['experience'].value
+    );
   }
 
   imageUpload(event: any) {
@@ -125,16 +196,20 @@ export class UserCreateComponent implements OnInit {
 
       this.imgFile = file;
       const reader = new FileReader();
-      reader.onload = e => this.profileImage = reader.result;
+      reader.onload = (e) => (this.profileImage = reader.result);
       reader.readAsDataURL(file);
     }
   }
 
   get myForm() {
-    return this.formData.controls;
+    return (
+      this.firstFormGroup.controls ||
+      this.secondFormGroup.controls ||
+      this.thirdFormGroup.controls
+    );
   }
 
   public hasError = (controlName: string, errorName: string) => {
-    return this.formData.controls[controlName].hasError(errorName);
-  }
+    return this.firstFormGroup.controls[controlName].hasError(errorName);
+  };
 }

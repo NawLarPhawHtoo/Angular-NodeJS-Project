@@ -8,12 +8,12 @@ router
 .get(getUsers)
 
 router
-.route("/create")
+.route("/create") 
 .post(createUser)     
 
 router
 .route("/read/:id") 
-.post(findUser)
+.get(findUser)
 
 router
 .route("/update/:id")

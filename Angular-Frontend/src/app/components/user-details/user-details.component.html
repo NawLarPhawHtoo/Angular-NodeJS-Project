@@ -1,0 +1,23 @@
+<div class="col-sm" style="text-align: right;"> 
+  <button type="button" class="btn btn-primary" (click)="goToList()">Go to List</button>  
+  <button type="button" class="btn btn-primary" (click)="goToEdit">Edit</button> 
+</div>
+<mat-card>
+  <mat-card-header style="color: rgb(63,81,181);">User Information Details</mat-card-header>
+  <mat-card-content>
+  <div style="text-align: center;" >
+    <!-- <p style="color: rgb(63,81,181);">Almost done! Please check your information!</p> -->
+    <p>Profile :  <img [src]="'http://localhost:8000/'+ userDetails.profile" class="profileimg"></p>
+    <p>Your Name : {{userDetails.name}} </p>
+    <p>Email : {{userDetails.email}} </p>
+    <!-- <p>Password : {{ userDetails.password}} </p> -->
+    <p>Date of Birthday : {{ userDetails.birthday}}</p>
+    <p>Gender : {{userDetails.gender}}</p>
+    <p>Type : {{userDetails.type}}</p>
+    <p>Skill : {{userDetails.skill }} </p>
+    <p>Experience :{{ userDetails.experience}}</p>
+    <p>Address : {{ userDetails.address}} </p>
+    <p>Phone Number : {{userDetails.phone}}</p>
+  </div>
+  </mat-card-content>
+</mat-card>

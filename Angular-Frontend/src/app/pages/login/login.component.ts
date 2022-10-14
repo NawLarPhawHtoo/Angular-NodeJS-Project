@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,20 +10,36 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup = new FormGroup({});
-  flag: boolean = true;
+ email!: string;
+ password!: string;
+ formData!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+ public showPassword: boolean = false;
+
+constructor(private authService:AuthService,private router:Router) { }
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      email: [null, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
+    this.formData=new FormGroup({
+      email: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
     });
   }
 
-  saveDetails(form: any) {
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(form.value, null, 4));
+  onClickLogin(data:any){
+    this.email=data.email;
+    this.password=data.password;
+
+    this.authService.login(this.email, this.password).subscribe((data:any)=>{
+      localStorage.setItem("isUserLoggedIn","true");
+      localStorage.setItem("token",data.token);
+      localStorage.setItem("loginUser",JSON.stringify(data.users));
+
+      this.router.navigate(['/user-list']);
+    });
+  }
+
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
 }

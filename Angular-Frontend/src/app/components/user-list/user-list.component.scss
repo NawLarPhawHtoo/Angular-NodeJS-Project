@@ -14,21 +14,17 @@ mat-paginator {
 th.mat-header-cell {
   text-align: left;
   max-width: 300px;
+  color: rgb(238, 77, 23);
 }
 
 td.mat-cell  {
   text-align: left;
 }
 
-clearfix::after{
-  clear: both;
-  content: '';
-  display: table;
-}
-
-mat-card {
-  height: 30px;
+.mat-card  {
+  margin: 0 auto;
   text-align: center;
+  box-shadow: none;
 }
 
 .profileimg {

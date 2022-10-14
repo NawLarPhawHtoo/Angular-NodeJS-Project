@@ -8,4 +8,7 @@ export class User {
   address!:String;
   type!:String;
   profile!:String;
+  skill!:String;
+  experience!:String;
+  private _id: any;
 }

@@ -12,6 +12,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const multer_1 = __importDefault(require("multer"));
 const uuid_1 = require("uuid");
 const user_route_1 = __importDefault(require("./src/routes/user.route"));
+const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
 dotenv_1.default.config();
 const fileStorage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
@@ -49,6 +50,7 @@ app.use((0, multer_1.default)({ storage: fileStorage, fileFilter }).single("prof
 app.use("/apiuploads", express_1.default.static("apiuploads"));
 app.use('/', express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use('/api/users', user_route_1.default);
+app.use('/api', auth_route_1.default);
 app.get('/', (req, res) => {
     res.send("/Hello Welcome");
 });

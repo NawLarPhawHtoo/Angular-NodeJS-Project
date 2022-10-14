@@ -8,5 +8,7 @@ export interface UserCreate{
   address: string;
   type: string;
   profile?:string;
+  skill?:string;
+  experience?:string;
   created_user_id:any
 }

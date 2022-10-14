@@ -38,6 +38,14 @@ let userSchema = new Schema({
     enum:['Admin','User'],
     default:'User'
   },
+  skill:{
+    type: String,
+    default:""
+  },
+  experience:{
+    type: String,
+    default:""
+  },
   created_user_id:{
     type:Schema.Types.ObjectId,
     ref:"User"

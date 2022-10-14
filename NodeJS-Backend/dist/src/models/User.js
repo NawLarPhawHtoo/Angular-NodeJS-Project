@@ -39,6 +39,14 @@ let userSchema = new mongoose_1.Schema({
         enum: ['Admin', 'User'],
         default: 'User'
     },
+    skill: {
+        type: String,
+        default: ""
+    },
+    experience: {
+        type: String,
+        default: ""
+    },
     created_user_id: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User"
