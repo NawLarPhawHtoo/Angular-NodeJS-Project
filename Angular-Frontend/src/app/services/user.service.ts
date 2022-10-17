@@ -10,6 +10,8 @@ import { User } from '../model/user';
 })
 export class UserService {
 
+  imgFile:any;
+
   REST_API: string = 'http://localhost:8000/api/users';
 
   httpHeaders=new HttpHeaders().set('Content-Type', 'application/json');

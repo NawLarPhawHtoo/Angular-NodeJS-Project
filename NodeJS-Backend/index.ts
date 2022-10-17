@@ -50,7 +50,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname,'public')));
 app.use(multer({ storage: fileStorage, fileFilter }).single("profile"));
 app.use("/apiuploads", express.static("apiuploads"));
-app.use('/',express.static(path.join(__dirname,'public')));
+// app.use('/',express.static(path.join(__dirname,'public')));
 
 
 app.use('/api/users',userRoute);

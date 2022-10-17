@@ -1,6 +1,7 @@
 mat-card {
-  width: 600px;
+  width: 90%;
   margin: 0 auto;
+  margin-top: 30px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(5px);
@@ -9,7 +10,7 @@ mat-card {
 }
 
 mat-form-field {
-  width: 200px;
+  // width: 200px;
   margin: 5px 10px;
 }
 
@@ -60,4 +61,8 @@ button {
   margin-left: 0;
   height: 80%;
   width: 20%;
+}
+
+.mat-stepper-horizontal {
+  margin:20px;
 }

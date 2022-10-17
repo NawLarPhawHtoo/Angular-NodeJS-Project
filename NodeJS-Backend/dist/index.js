@@ -48,7 +48,7 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use((0, multer_1.default)({ storage: fileStorage, fileFilter }).single("profile"));
 app.use("/apiuploads", express_1.default.static("apiuploads"));
-app.use('/', express_1.default.static(path_1.default.join(__dirname, 'public')));
+// app.use('/',express.static(path.join(__dirname,'public')));
 app.use('/api/users', user_route_1.default);
 app.use('/api', auth_route_1.default);
 app.get('/', (req, res) => {

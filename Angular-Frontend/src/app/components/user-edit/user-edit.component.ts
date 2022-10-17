@@ -87,6 +87,7 @@ export class UserEditComponent implements OnInit {
       formData.append('gender', this.formData.controls['gender'].value);
       formData.append('address', this.formData.controls['address'].value);
   
+      console.log(formData)
       this.userService.updateUser(id, formData)
         .subscribe(res => {
           this.dialogRef.close('update');
@@ -128,6 +129,7 @@ export class UserEditComponent implements OnInit {
       const file = event.target.files[0];
 
       this.imgFile = file;
+      console.log(this.imgFile);
       const reader = new FileReader();
       reader.onload = e => this.profileImage = reader.result;
       reader.readAsDataURL(file);

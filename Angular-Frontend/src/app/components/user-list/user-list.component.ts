@@ -5,7 +5,7 @@ import { UserEditComponent } from '../user-edit/user-edit.component';
 import { UserCreateComponent } from '../user-create/user-create.component';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { UserDeleteConfirmDialogComponent } from '../user-delete-confirm-dialog/user-delete-confirm-dialog.component';
@@ -56,7 +56,7 @@ export class UserListComponent implements OnInit,AfterViewInit{
     this.userService.getUsers().subscribe((res: any) => {
       console.log(res);
       // this.users=res.data;
-      this.dataSource.data = res.data as User[];
+      this.dataSource.data = res.data;
       // console.log(this.users)  
     });
   }
@@ -94,11 +94,11 @@ export class UserListComponent implements OnInit,AfterViewInit{
     })
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(UserCreateComponent, { width: '700px' });
+  // openDialog() {
+  //   const dialogRef = this.dialog.open(UserCreateComponent, { width: '700px' });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == 'create') this.getUsers();
-    });
-  }
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result == 'create') this.getUsers();
+  //   });
+  // }
 }
