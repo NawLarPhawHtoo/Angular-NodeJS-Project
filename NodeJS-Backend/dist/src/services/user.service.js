@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserService = exports.updateUserService = exports.createUserService = exports.findUserService = exports.getUserService = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield User_1.default.find();
@@ -56,6 +55,10 @@ const findUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.findUserService = findUserService;
 const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(JSON.stringify(req.body.basic));
+        console.log(req.body.profile);
+        console.log(JSON.stringify(req.body.contact));
+        console.log(JSON.stringify(req.body.education));
         const errors = (0, express_validator_1.validationResult)(req.body);
         if (!errors.isEmpty()) {
             const error = new Error("Validation failed!");
@@ -68,17 +71,22 @@ const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
             profile = req.file.path.replace("\\", "/");
         }
         const userTo = {
-            name: req.body.name,
-            email: req.body.email,
-            password: yield bcrypt_1.default.hash(req.body.password, 12),
-            phone: req.body.phone,
-            birthday: req.body.birthday,
-            gender: req.body.gender,
-            address: req.body.address,
-            type: req.body.type,
-            skill: req.body.skill,
-            experience: req.body.experience,
+            /* name: req.body.name,
+             email: req.body.email,
+             password: await bcrypt.hash(req.body.password, 12),
+             phone: req.body.phone,
+             birthday: req.body.birthday,
+             gender: req.body.gender,
+             address: req.body.address,
+             type: req.body.type,
+             skill: req.body.skill,
+             experience: req.body.experience,
+             profile: profile,
+             created_user_id: req.body.created_user_id,*/
+            basic: req.body.basic,
             profile: profile,
+            contact: req.body.contact,
+            education: req.body.education,
             created_user_id: req.body.created_user_id,
         };
         const user = new User_1.default(userTo);

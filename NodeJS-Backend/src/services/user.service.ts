@@ -54,6 +54,11 @@ export const createUserService = async (
   next: NextFunction
 ) => {
   try {
+    console.log(JSON.stringify(req.body.basic));
+    console.log(req.body.profile);
+    console.log(JSON.stringify(req.body.contact));
+    console.log(JSON.stringify(req.body.education));
+    
     const errors = validationResult(req.body);
     if (!errors.isEmpty()) {
       const error: any = new Error("Validation failed!");
@@ -67,8 +72,8 @@ export const createUserService = async (
       profile = req.file.path.replace("\\", "/");
     }
 
-    const userTo: UserCreate = {
-      name: req.body.name,
+    const userTo = {
+     /* name: req.body.name,
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, 12),
       phone: req.body.phone,
@@ -79,6 +84,12 @@ export const createUserService = async (
       skill: req.body.skill,
       experience: req.body.experience,
       profile: profile,
+      created_user_id: req.body.created_user_id,*/
+
+      basic:req.body.basic,
+      profile:profile,
+      contact:req.body.contact,
+      education:req.body.education,
       created_user_id: req.body.created_user_id,
     };
     const user = new User(userTo);

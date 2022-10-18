@@ -35,18 +35,17 @@ export const MY_DATE_FORMAT = {
 })
 export class UserCreateComponent implements OnInit {
 
-  constructor(
-    public dialogRef: MatDialogRef<UserCreateComponent>,
-    public dialog: MatDialog,
-    private userService: UserService,
-    public fb: FormBuilder,
-    private router:Router,
-  ) {}
+  profileImage: any;
+  imgFile: any;
 
+  isLinear=false;
+
+  today = new Date();
   typeOption = [{ enum: 'Admin' }, { enum: 'User' }];
 
   gender = [{ enum: 'Male' }, { enum: 'Female' }, { enum: 'Other' }];
 
+  
   skills = [{ enum: 'Programming' }, { enum: 'Language' }, { enum: 'Others' }];
 
   experiences = [
@@ -55,50 +54,43 @@ export class UserCreateComponent implements OnInit {
     { enum: '1 year above' },
   ];
 
-  profileImage: any ;
-  imgFile: any;
-  confirmView: Boolean = false;
-  today = new Date();
+  constructor(
+    public dialogRef: MatDialogRef<UserCreateComponent>,
+    public dialog: MatDialog,
+    private userService: UserService,
+    public fb: FormBuilder,
+    private router:Router,
+  ) {}
 
-  formData!: FormGroup;
-  firstFormGroup!: FormGroup;
-  secondFormGroup!: FormGroup;
-  thirdFormGroup!: FormGroup;
-  imageFormGroup!: FormGroup;
-
-  form1:any;
-  form2:any;
-  form3:any;
-  form4:any;
 
   // @Output() outputImage:EventEmitter<any> = new EventEmitter();
 
   ngOnInit(): void {
     
-    this.firstFormGroup = this.fb.group({
+    // this.firstFormGroup = this.fb.group({
      
-      name: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      confirmPwd: new FormControl('', Validators.required),
-      profile: new FormControl(''),
-    });
+    //   name: new FormControl('', Validators.required),
+    //   email: new FormControl('', [Validators.required, Validators.email]),
+    //   password: new FormControl('', [
+    //     Validators.required,
+    //     Validators.minLength(6),
+    //   ]),
+    //   confirmPwd: new FormControl('', Validators.required),
+    //   profile: new FormControl(''),
+    // });
 
-    this.secondFormGroup = this.fb.group({
-      birthday: new FormControl(''),
-      gender: new FormControl(''),
-      type: new FormControl(''),
-      phone: new FormControl(''),
-      address: new FormControl(''),
-    });
+    // this.secondFormGroup = this.fb.group({
+    //   birthday: new FormControl(''),
+    //   gender: new FormControl(''),
+    //   type: new FormControl(''),
+    //   phone: new FormControl(''),
+    //   address: new FormControl(''),
+    // });
 
-    this.thirdFormGroup = this.fb.group({
-      skill: new FormControl(''),
-      experience: new FormControl(''),
-    });
+    // this.thirdFormGroup = this.fb.group({
+    //   skill: new FormControl(''),
+    //   experience: new FormControl(''),
+    // });
 
     // this.imageFormGroup = this.fb.group({
     //   profile: new FormControl(''),
@@ -106,6 +98,106 @@ export class UserCreateComponent implements OnInit {
 
 
   }
+
+
+
+  userCreateForm=this.fb.group({
+    basic:this.fb.group({
+      name: this.fb.control('', Validators.required),
+      email: this.fb.control('', Validators.required),
+      password: this.fb.control('', Validators.required),
+      // confirmPwd: this.fb.control('', Validators.required),
+      
+    }),
+    contact:this.fb.group({
+      birthday:this.fb.control(''),
+      gender: this.fb.control(''),
+      type: this.fb.control(''),
+      phone: this.fb.control(''),
+      address: this.fb.control(''),    
+
+    }),
+    education:this.fb.group({
+      skill:this.fb.control(''),
+      experience:this.fb.control(''),
+    }),
+    // profile: this.fb.group({
+      profile: this.fb.control(''),
+    // })   
+  });
+
+  get basicForm(){
+    return this.userCreateForm.get('basic') as FormGroup;
+  }
+
+  get contactForm(){
+    return this.userCreateForm.get('contact') as FormGroup;
+  }
+
+  get educationForm(){
+    return this.userCreateForm.get('education') as FormGroup;
+  }
+
+  get profileForm(){
+    return this.userCreateForm.get('profile') as FormGroup | any;
+  }
+
+addUser(){
+  console.log(this.basicForm);
+  console.log(this.contactForm);
+  console.log(this.educationForm);
+  // console.log(this.profileForm);
+
+  let basic= {basic: this.basicForm.value}
+  console.log(basic);
+  let contact= {contact: this.contactForm.value}
+  console.log(contact);
+  let education= {education: this.educationForm.value}
+  console.log(education);
+  let profile= {profile: this.imgFile}
+  console.log(profile);
+  // if(this.userCreateForm.valid){
+  //   const formData= new FormData();
+  //   formData.append('basic', JSON.stringify(this.basicForm.value));
+  //   formData.append('contact', JSON.stringify(this.contactForm.value));
+  //   formData.append('education', JSON.stringify(this.educationForm.value));
+  //   formData.append('profile', this.imgFile);
+
+    const data={...basic,...contact,...education,...profile};
+    console.log(data);
+    this.userService.createUser(data).subscribe(res =>{
+      console.log(res.data);
+      this.router.navigateByUrl('/user-list');
+    })
+    
+  // }
+  
+}
+
+imageUpload(event: any) {
+  if (event.target.files && event.target.files[0]) {
+    const file = event?.target?.files[0];
+
+    this.imgFile = file;
+    console.log(this.imgFile.name);
+
+    // this.outputImage.emit(this.imgFile);
+
+    const reader = new FileReader();
+    reader.onload = (e) => (this.profileImage = reader.result);
+    reader.readAsDataURL(file);
+  }
+}
+
+get myForm() {
+      return (
+        this.basicForm.controls ||
+        this.contactForm.controls ||
+        this.educationForm.controls
+      );
+    }
+}
+
 
 
   // onSubmit(){
@@ -128,44 +220,40 @@ export class UserCreateComponent implements OnInit {
   // }
 
 
-  public onClear() {
-    if (this.confirmView == true) {
-      this.firstFormGroup.controls['name'].enable();
-      this.firstFormGroup.controls['email'].enable();
-      this.firstFormGroup.controls['password'].enable();
-      this.firstFormGroup.controls['confirmPwd'].enable();
-      this.firstFormGroup.controls['profile'].enable();
-      this.secondFormGroup.controls['phone'].enable();
-      this.secondFormGroup.controls['birthday'].enable();
-      this.secondFormGroup.controls['gender'].enable();
-      this.secondFormGroup.controls['address'].enable();
-      this.secondFormGroup.controls['type'].enable();
-      this.thirdFormGroup.controls['skill'].enable();
-      this.thirdFormGroup.controls['experience'].enable();
+  // public onClear() {
+  //   if (this.confirmView == true) {
+  //     this.firstFormGroup.controls['name'].enable();
+  //     this.firstFormGroup.controls['email'].enable();
+  //     this.firstFormGroup.controls['password'].enable();
+  //     this.firstFormGroup.controls['confirmPwd'].enable();
+  //     this.firstFormGroup.controls['profile'].enable();
+  //     this.secondFormGroup.controls['phone'].enable();
+  //     this.secondFormGroup.controls['birthday'].enable();
+  //     this.secondFormGroup.controls['gender'].enable();
+  //     this.secondFormGroup.controls['address'].enable();
+  //     this.secondFormGroup.controls['type'].enable();
+  //     this.thirdFormGroup.controls['skill'].enable();
+  //     this.thirdFormGroup.controls['experience'].enable();
 
-    } else {     this.confirmView = false;
+  //   } else {     this.confirmView = false;
 
-      this.firstFormGroup.reset();
-      this.secondFormGroup.reset();
-      this.thirdFormGroup.reset();
-    }
-  }
+  //     this.firstFormGroup.reset();
+  //     this.secondFormGroup.reset();
+  //     this.thirdFormGroup.reset();
+  //   }
+  // }
 
-  onClickAddUser() {
-    console.log(this.firstFormGroup.value); 
-    console.log(this.secondFormGroup.value);
-    console.log(this.thirdFormGroup.value);
-    // console.log(this.imageFormGroup.value);
+  // onClickAddUser() {
+  //   console.log(this.firstFormGroup.value); 
+  //   console.log(this.secondFormGroup.value);
+  //   console.log(this.thirdFormGroup.value);
+  
+  //   const data: any = {...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value};
+  //   console.log(data);
 
-
-
-    const data: any = {...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value};
-    console.log(data);
-
-    this.userService.createUser(data).subscribe(res=> {
-      // this.dialogRef.close('create');
-      this.router.navigateByUrl('/user-list');
-    });
+  //   this.userService.createUser(data).subscribe(res=> {
+  //     this.router.navigateByUrl('/user-list');
+  //   });
     
 
   //   if (this.firstFormGroup.valid) {
@@ -188,83 +276,98 @@ export class UserCreateComponent implements OnInit {
   //     this.thirdFormGroup.controls['experience'].disable();
   //     this.confirmView = true;
   //   }
-  }
 
+  // imageUpload(event: any) {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const file = event?.target?.files[0];
 
-  getInfo() {
-    const formData1 = new FormData();
-    formData1.append('profile', this.imgFile);
-    formData1.append('name', this.firstFormGroup.controls['name'].value);
-    formData1.append('email', this.firstFormGroup.controls['email'].value);
-    formData1.append(
-      'password',
-      this.firstFormGroup.controls['password'].value
-    );
+  //     this.imgFile = file;
+  //     console.log(this.imgFile.name);
 
-    this.getSecondForm();
-  }
+  //     // this.outputImage.emit(this.imgFile);
 
-  getSecondForm() {
-    const formData2 = new FormData();
-    formData2.append('phone', this.secondFormGroup.controls['phone'].value);
-    formData2.append(
-      'birthday',
-      this.secondFormGroup.controls['birthday'].value
-    );
-    formData2.append('gender', this.secondFormGroup.controls['gender'].value);
-    formData2.append('address', this.secondFormGroup.controls['address'].value);
-    formData2.append('type', this.secondFormGroup.controls['type'].value);
-
-    this.getThirdForm();
-  }
-
-  getThirdForm() {
-    const formData3 = new FormData();
-    formData3.append('skill', this.thirdFormGroup.controls['skill'].value);
-    formData3.append(
-      'experience',
-      this.thirdFormGroup.controls['experience'].value
-    );
-
-    this.getImage();
-  }
-
-  imageUpload(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      const file = event?.target?.files[0];
-
-      this.imgFile = file;
-      console.log(this.imgFile.name);
-
-      // this.outputImage.emit(this.imgFile);
-
-      const reader = new FileReader();
-      reader.onload = (e) => (this.profileImage = reader.result);
-      reader.readAsDataURL(file);
-    }
-  }
-
-  getImage(){
-    const formData= new FormData();
-    console.log(this.imgFile);  
-    formData.append('profile',this.imgFile);
- }
-
-  // receiveImage(img:any){
-  //   this.userService.imgFile=img;
-
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => (this.profileImage = reader.result);
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
   // }
 
-  get myForm() {
-    return (
-      this.firstFormGroup.controls ||
-      this.secondFormGroup.controls ||
-      this.thirdFormGroup.controls ||
-      this.imageFormGroup.controls
-    );
-  }
 
-  public hasError = (controlName: string, errorName: string) => {
-    return this.firstFormGroup.controls[controlName].hasError(errorName);
-  };
-}
+//   getInfo() {
+//     const formData1 = new FormData();
+//     formData1.append('profile', this.imgFile);
+//     formData1.append('name', this.firstFormGroup.controls['name'].value);
+//     formData1.append('email', this.firstFormGroup.controls['email'].value);
+//     formData1.append(
+//       'password',
+//       this.firstFormGroup.controls['password'].value
+//     );
+
+//     this.getSecondForm();
+//   }
+
+//   getSecondForm() {
+//     const formData2 = new FormData();
+//     formData2.append('phone', this.secondFormGroup.controls['phone'].value);
+//     formData2.append(
+//       'birthday',
+//       this.secondFormGroup.controls['birthday'].value
+//     );
+//     formData2.append('gender', this.secondFormGroup.controls['gender'].value);
+//     formData2.append('address', this.secondFormGroup.controls['address'].value);
+//     formData2.append('type', this.secondFormGroup.controls['type'].value);
+
+//     this.getThirdForm();
+//   }
+
+//   getThirdForm() {
+//     const formData3 = new FormData();
+//     formData3.append('skill', this.thirdFormGroup.controls['skill'].value);
+//     formData3.append(
+//       'experience',
+//       this.thirdFormGroup.controls['experience'].value
+//     );
+
+//     this.getImage();
+//   }
+
+  // imageUpload(event: any) {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const file = event?.target?.files[0];
+
+  //     this.imgFile = file;
+  //     console.log(this.imgFile.name);
+
+  //     // this.outputImage.emit(this.imgFile);
+
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => (this.profileImage = reader.result);
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+
+//   getImage(){
+//     const formData= new FormData();
+//     console.log(this.imgFile);  
+//     formData.append('profile',this.imgFile);
+//  }
+
+//   // receiveImage(img:any){
+//   //   this.userService.imgFile=img;
+
+//   // }
+
+//   get myForm() {
+//     return (
+//       this.firstFormGroup.controls ||
+//       this.secondFormGroup.controls ||
+//       this.thirdFormGroup.controls ||
+//       this.imageFormGroup.controls
+//     );
+//   }
+
+//   public hasError = (controlName: string, errorName: string) => {
+//     return this.firstFormGroup.controls[controlName].hasError(errorName);
+//   };
+

@@ -1,18 +1,23 @@
 import mongoose, { Schema,model } from "mongoose";
 
-let userSchema = new Schema({
+const basicSchema = new Schema({
+ 
   name:{
     type: String,
-    required: true
+    // required: true
   },
   email:{
     type: String,
-    required: true
+    // required: true
   },
   password:{
     type: String,
-    required: true
+    // required: true
   },
+  
+})
+
+const contactSchema=new Schema({
   phone:{
     type: String,
     default:""
@@ -29,15 +34,15 @@ let userSchema = new Schema({
     type: String,
     default:""
   },
-  profile:{
-    type: String,
-    default:""
-  },
   type:{
     type: String,
     enum:['Admin','User'],
     default:'User'
   },
+
+})
+
+const educationSchema=new Schema({
   skill:{
     type: String,
     default:""
@@ -46,6 +51,19 @@ let userSchema = new Schema({
     type: String,
     default:""
   },
+
+})
+
+const userSchema=new Schema({
+  basic:basicSchema,
+  contact:contactSchema,
+  education:educationSchema,
+  profile:{
+    type: String,
+    default:""
+  },
+
+  
   created_user_id:{
     type:Schema.Types.ObjectId,
     ref:"User"
@@ -64,6 +82,7 @@ let userSchema = new Schema({
 },
 {
   timestamps:true
-});
+}
+);
 
 export default model ("User",userSchema);

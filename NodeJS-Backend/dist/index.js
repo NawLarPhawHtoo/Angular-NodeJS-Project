@@ -43,6 +43,7 @@ mongoose_1.default.connect(`${process.env.MONGO_URL}`, {}, err => {
 });
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
+app.use(express_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
