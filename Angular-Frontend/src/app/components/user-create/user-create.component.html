@@ -310,77 +310,28 @@
         </form>
       </mat-step> -->
 
-<!-- <mat-step [editable]="true">
-        <ng-template matStepLabel>Summary</ng-template>
-        <div style="text-align: center">
-          <p style="color: rgb(63, 81, 181)">
-            Almost done! Please check your information!
-          </p>
-          <img [src]="profileImage" class="profileimg" />
-          <p>Your Name : {{ this.firstFormGroup.value.name }}</p>
-          <p>Email : {{ this.firstFormGroup.value.email }}</p>
-          <p>Password : {{ this.firstFormGroup.value.password }}</p>
-          <p>Date of Birthday : {{ this.secondFormGroup.value.birthday }}</p>
-          <p>Phone No. : {{ this.secondFormGroup.value.phone }}</p>
-          <p>Type : {{ this.secondFormGroup.value.type }}</p>
-          <p>Skill : {{ this.thirdFormGroup.value.skill }}</p>
-          <p>Experience :{{ this.thirdFormGroup.value.experience }}</p>
-          <p>Address : {{ this.secondFormGroup.value.address }}</p>
-        </div>
-
-        <div style="float: right; width: fit-content">
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button color="warn">Reset</button>
-          <button mat-button color="primary" (click)="onClickAddUser()">Submit</button>
-        </div>
-      </mat-step>
-    </mat-horizontal-stepper>
-   </form>
-</mat-card> -->
-
 <form [formGroup]="userCreateForm" (ngSubmit)="addUser()">
   <mat-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="profileForm" label="Fill your profile">
-      <div formGroupName="profile">
-        <label>Profile</label>
-        <div class="profileinput">
-          <input
-            #file
-            type="file"
-            (change)="imageUpload($event)"
-            formControlName="profile"
-            accept="image/*"
-            maxFileSize="2000000"
-          />
-        </div>
-        <div *ngIf="profileImage">
-          <img [src]="profileImage" class="profileimg" />
-        </div>
-
-        <div>
-          <button mat-raised-button matStepperPrevious>Back</button>
-          <button mat-raised-button matStepperNext>Next</button>
-        </div>
-      </div>
-    </mat-step>
 
     <mat-step [stepControl]="basicForm" label="Fill out Basic Info">
+      <label>Profile</label>
+      <div class="profileinput">
+        <input
+          #file
+          type="file"
+          (change)="imageUpload($event)"
+          formControlName="profile"
+          accept="image/*"
+          maxFileSize="2000000"
+        />
+      </div>
+      <div *ngIf="profileImage">
+        <img [src]="profileImage" class="profileimg" />
+      </div>
       <div formGroupName="basic">
+       
         <mat-form-field appearance="fill" class="full-width">
-          <label>Profile</label>
-        <div class="profileinput">
-          <input
-            #file
-            type="file"
-            (change)="imageUpload($event)"
-            formControlName="profile"
-            accept="image/*"
-            maxFileSize="2000000"
-          />
-        </div>
-        <div *ngIf="profileImage">
-          <img [src]="profileImage" class="profileimg" />
-        </div>
+         
           <mat-label>Name</mat-label>
           <input
             type="text"
@@ -419,14 +370,8 @@
             >Please enter your password</mat-error
           >
         </mat-form-field>
-        <!-- <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Confirm your Password</mat-label>
-        <input type="text" matInput class="form-control" formControlName="confirmPwd" required>
-         <mat-error *ngIf="myForm['confirmPwd'].hasError('required')">Please confirm your password</mat-error>
-        <mat-error *ngIf="myForm['confirmPwd'].hasError('mustMatch')">Password must be match</mat-error>
-       </mat-form-field> -->
         <div>
-          <button mat-raised-button color="primary" matStepperNext>Next</button>
+          <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
         </div>
       </div>
     </mat-step>
@@ -488,8 +433,8 @@
           </mat-select>
         </mat-form-field>
         <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-button matStepperNext type="button">Next</button>
         </div>
       </div>
     </mat-step>
@@ -520,25 +465,25 @@
         </mat-form-field>
 
         <div>
-          <button mat-raised-button matStepperPrevious>Back</button>
-          <button mat-raised-button matStepperNext>Next</button>
+          <button mat-raised-button matStepperPrevious type="button">Back</button>
+          <button mat-raised-button matStepperNext type="button">Next</button>
         </div>
       </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Summary</ng-template>
       <img [src]="profileImage" class="profileimg" />
-      <p>Your Name :</p>
-      <p>Email :</p>
-      <p>Date of Birth :</p>
-      <p>Type :</p>
-      <p>Gender :</p>
-      <p>Address :</p>
-      <p>Skill :</p>
-      <p>Experience :</p>
+      <p>Your Name : {{basicForm.value.name}}</p>
+      <p>Email :  {{basicForm.value.email}}</p>
+      <p>Date of Birth : {{contactForm.value.birthday| date:'dd/MM/YYYY'}}</p>
+      <p>Type : {{contactForm.value.type}}</p>
+      <p>Gender : {{contactForm.value.gender}}</p>
+      <p>Address : {{contactForm.value.address}}</p>
+      <p>Skill : {{educationForm.value.skill}}</p>
+      <p>Experience : {{educationForm.value.experience}}</p>
 
       <div>
-        <button mat-raised-button color="primary" matStepperPrevious>
+        <button mat-raised-button color="primary" matStepperPrevious type="button">
           Back
         </button>
         <button mat-raised-button color="warn">Submit</button>

@@ -7,17 +7,19 @@
   <mat-card-content>
   <div style="text-align: center;" >
     <!-- <p style="color: rgb(63,81,181);">Almost done! Please check your information!</p> -->
-    <p>Profile :  <img [src]="'http://localhost:8000/'+ userDetails.profile" class="profileimg"></p>
-    <p>Your Name : {{userDetails.name}} </p>
-    <p>Email : {{userDetails.email}} </p>
-    <!-- <p>Password : {{ userDetails.password}} </p> -->
-    <p>Date of Birthday : {{ userDetails.birthday}}</p>
-    <p>Gender : {{userDetails.gender}}</p>
-    <p>Type : {{userDetails.type}}</p>
-    <p>Skill : {{userDetails.skill }} </p>
-    <p>Experience :{{ userDetails.experience}}</p>
-    <p>Address : {{ userDetails.address}} </p>
-    <p>Phone Number : {{userDetails.phone}}</p>
+    <div *ngIf="profile" class="personal-info-right">
+      <img [src]="profile" class="profile-img" />
+    </div>
+    <p>Your Name : {{ name}} </p>
+    <p>Email : {{email}} </p>
+    <p>Password : {{ password}} </p>
+    <p>Date of Birthday : {{ birthday}}</p>
+    <p>Gender : {{gender}}</p>
+    <p>Type : {{type}}</p>
+    <p>Skill : {{skill }} </p>
+    <p>Experience :{{ experience}}</p>
+    <p>Address : {{ address}} </p>
+    <p>Phone Number : {{phone}}</p>
   </div>
   </mat-card-content>
 </mat-card>

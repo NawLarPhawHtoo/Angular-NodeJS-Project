@@ -54,10 +54,10 @@ export const createUserService = async (
   next: NextFunction
 ) => {
   try {
-    console.log(JSON.stringify(req.body.basic));
-    console.log(req.body.profile);
-    console.log(JSON.stringify(req.body.contact));
-    console.log(JSON.stringify(req.body.education));
+    // console.log(JSON.stringify(req.body.basic));
+    // console.log(req.body.profile);
+    // console.log(JSON.stringify(req.body.contact));
+    // console.log(JSON.stringify(req.body.education));
     
     const errors = validationResult(req.body);
     if (!errors.isEmpty()) {
@@ -72,24 +72,30 @@ export const createUserService = async (
       profile = req.file.path.replace("\\", "/");
     }
 
-    const userTo = {
-     /* name: req.body.name,
+    let basic = {
+      name: req.body.name,
       email: req.body.email,
-      password: await bcrypt.hash(req.body.password, 12),
-      phone: req.body.phone,
+      password: req.body.password,
+    };
+
+    let contact = {
       birthday: req.body.birthday,
       gender: req.body.gender,
       address: req.body.address,
       type: req.body.type,
-      skill: req.body.skill,
-      experience: req.body.experience,
-      profile: profile,
-      created_user_id: req.body.created_user_id,*/
+      phone: req.body.phone
+    };
 
-      basic:req.body.basic,
-      profile:profile,
-      contact:req.body.contact,
-      education:req.body.education,
+    let education={
+      skill:req.body.skill,
+      experience:req.body.experience
+    }
+
+    const userTo :UserCreate= {
+      basic,
+      profile: profile,
+      contact,
+      education,
       created_user_id: req.body.created_user_id,
     };
     const user = new User(userTo);
@@ -125,16 +131,37 @@ export const updateUserService = async (
         user.profile = profile;
       }
     }
+    // let basic = {
+    //   name: req.body.name,
+    //   email: req.body.email,
+    //   password: req.body.password,
+    // };
 
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.phone = req.body.phone;
-    user.birthday = req.body.birthday;
-    user.gender = req.body.gender;
-    user.address = req.body.address;
-    user.type = req.body.type;
-    user.skill = req.body.skill;
-    user.experience = req.body.experience;
+    // let contact = {
+    //   birthday: req.body.birthday,
+    //   gender: req.body.gender,
+    //   address: req.body.address,
+    //   type: req.body.type,
+    //   phone: req.body.phone
+    // };
+
+    // let education={
+    //   skill:req.body.skill,
+    //   experience:req.body.experience
+    // };
+      user.basic;
+      user.contact;
+      user.education;
+    // user.name = req.body.basic.name;
+    // user.email = req.body.basic.email;
+    // user.password = req.body.basic.password;
+    // user.phone = req.body.contact.phone;
+    // user.birthday = req.body.contact.birthday;
+    // user.gender = req.body.contact.gender;
+    // user.address = req.body.contact.address;
+    // user.type = req.body.contact.type;
+    // user.skill = req.body.education.skill;
+    // user.experience = req.body.education.experience;
     user.profile = profile;
     user.created_user_id = req.body.created_user_id;
     user.updated_user_id = req.body.updated_user_id;

@@ -1,7 +1,6 @@
 import mongoose, { Schema,model } from "mongoose";
 
 const basicSchema = new Schema({
- 
   name:{
     type: String,
     // required: true
@@ -58,11 +57,11 @@ const userSchema=new Schema({
   basic:basicSchema,
   contact:contactSchema,
   education:educationSchema,
+  
   profile:{
     type: String,
     default:""
   },
-
   
   created_user_id:{
     type:Schema.Types.ObjectId,

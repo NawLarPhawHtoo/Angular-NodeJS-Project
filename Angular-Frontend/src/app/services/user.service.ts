@@ -28,10 +28,11 @@ export class UserService {
       basicForm:this.basicForm,
       contactForm:this.contactForm,
       educationForm:this.educationForm,
-      profileForm:this.profileForm,
+      // profileForm:this.profileForm,
     })
 
     this.basicForm=this.fb.group({
+      profile:[''],
           name:[''],
           email:[''],
           password:[''],
@@ -77,14 +78,14 @@ export class UserService {
       experience:[''],
     });
 
-    this.profileForm=this.fb.group({
-      profile:[''],
-    });
+    // this.profileForm=this.fb.group({
+    //   profile:[''],
+    // });
 
     this.userCreateForm.controls['basicForm']=this.basicForm;
     this.userCreateForm.controls['contactForm']=this.contactForm;
     this.userCreateForm.controls['educationForm']=this.educationForm
-    this.userCreateForm.controls['profileForm']=this.profileForm;
+    // this.userCreateForm.controls['profileForm']=this.profileForm;
   }
 
   //get users

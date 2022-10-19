@@ -1,5 +1,5 @@
 export interface Basic{
-  
+ 
   name: string;
   email: string;
   password: string;
@@ -22,8 +22,8 @@ export interface Education{
 
 export interface UserCreate{
   profile:string;
- basic: Basic
- contact: Contact;
- education: Education;
+  basic: Basic
+  contact: Contact;
+  education: Education;
 created_user_id:any
 }

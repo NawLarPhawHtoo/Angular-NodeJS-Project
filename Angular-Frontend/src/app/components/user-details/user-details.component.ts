@@ -12,45 +12,49 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./user-details.component.scss'],
 })
 export class UserDetailsComponent implements OnInit {
-  userDetails$: Observable<User> | any;
-  userDetails: User = {} as User;
-  selectedId: any;
-  formData!: FormGroup;
-  dialogRef: any;
-  data: any;
-  imgFile: any;
-  _id: string = '';
+  userDetails: any;
+
+public profile:any;
+  public name!: string;
+  public email!: string;
+  public password!: string;
+  public birthday!: string;
+  public gender!: string;
+  public type!: string;
+  public address!: string;
+  public phone!: string;
+  public skill!: string;
+  public experience!: string;
 
   constructor(
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private activateRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.userDetails$ = this.route.paramMap.pipe(
-      switchMap(params => {
-        console.log(params);
-        this.selectedId = params.get('id');
-        console.log(this.selectedId);
-        return this.userService.findUser(this.selectedId);
-      })
-    );
-    this.userDetails$.subscribe((res: any) => {
-      this.userDetails = res.data;
+    const id: string = this.activateRoute.snapshot.params['id'];
+    console.log(id);
+
+    this.userService.findUser(id).subscribe(res=>{
+      this.userDetails=res.data;
       console.log(this.userDetails);
-      // const name=this.userDetails.name;
-      // const email=this.userDetails.email;
-      // const password=this.userDetails.password;
-      // const birthday=this.userDetails.birthday;
-      // const type=this.userDetails.type;
-      // const profile=this.userDetails.profile;
-      // const phone=this.userDetails.phone;
-      // const gender=this.userDetails.gender;
-      // const address=this.userDetails.address;
-      // const skills=this.userDetails.skill;
-      // const experience=this.userDetails.experience;
-    });
+
+      if(this.userDetails){
+        this.profile='http://localhost:8000/'+ this.userDetails.profile;
+        this.name=this.userDetails.basic.name;
+        this.email=this.userDetails.basic.email;
+        this.password=this.userDetails.basic.password;
+        this.birthday=this.userDetails.contact.birthday;
+        this.gender=this.userDetails.contact.gender;
+        this.type=this.userDetails.contact.type;
+        this.address=this.userDetails.contact.address;
+        this.phone=this.userDetails.contact.phone;
+        this.skill=this.userDetails.education.skill;
+        this.experience=this.userDetails.education.experience;
+      }
+
+    })
   }
   goToList() {
     this.router.navigate(['/user-list']);

@@ -62,47 +62,14 @@ export class UserCreateComponent implements OnInit {
     private router:Router,
   ) {}
 
-
-  // @Output() outputImage:EventEmitter<any> = new EventEmitter();
-
-  ngOnInit(): void {
-    
-    // this.firstFormGroup = this.fb.group({
-     
-    //   name: new FormControl('', Validators.required),
-    //   email: new FormControl('', [Validators.required, Validators.email]),
-    //   password: new FormControl('', [
-    //     Validators.required,
-    //     Validators.minLength(6),
-    //   ]),
-    //   confirmPwd: new FormControl('', Validators.required),
-    //   profile: new FormControl(''),
-    // });
-
-    // this.secondFormGroup = this.fb.group({
-    //   birthday: new FormControl(''),
-    //   gender: new FormControl(''),
-    //   type: new FormControl(''),
-    //   phone: new FormControl(''),
-    //   address: new FormControl(''),
-    // });
-
-    // this.thirdFormGroup = this.fb.group({
-    //   skill: new FormControl(''),
-    //   experience: new FormControl(''),
-    // });
-
-    // this.imageFormGroup = this.fb.group({
-    //   profile: new FormControl(''),
-    // });
-
-
-  }
-
-
+  ngOnInit(): void { }
 
   userCreateForm=this.fb.group({
+
+    profile: this.fb.control(''),
+    
     basic:this.fb.group({
+     
       name: this.fb.control('', Validators.required),
       email: this.fb.control('', Validators.required),
       password: this.fb.control('', Validators.required),
@@ -118,12 +85,10 @@ export class UserCreateComponent implements OnInit {
 
     }),
     education:this.fb.group({
-      skill:this.fb.control(''),
-      experience:this.fb.control(''),
+      skill:this.fb.control('', Validators.required),
+      experience:this.fb.control('', Validators.required),
     }),
-    // profile: this.fb.group({
-      profile: this.fb.control(''),
-    // })   
+     
   });
 
   get basicForm(){
@@ -138,39 +103,32 @@ export class UserCreateComponent implements OnInit {
     return this.userCreateForm.get('education') as FormGroup;
   }
 
-  get profileForm(){
-    return this.userCreateForm.get('profile') as FormGroup | any;
-  }
 
 addUser(){
-  console.log(this.basicForm);
-  console.log(this.contactForm);
-  console.log(this.educationForm);
-  // console.log(this.profileForm);
 
-  let basic= {basic: this.basicForm.value}
-  console.log(basic);
-  let contact= {contact: this.contactForm.value}
-  console.log(contact);
-  let education= {education: this.educationForm.value}
-  console.log(education);
-  let profile= {profile: this.imgFile}
-  console.log(profile);
-  // if(this.userCreateForm.valid){
-  //   const formData= new FormData();
-  //   formData.append('basic', JSON.stringify(this.basicForm.value));
-  //   formData.append('contact', JSON.stringify(this.contactForm.value));
-  //   formData.append('education', JSON.stringify(this.educationForm.value));
-  //   formData.append('profile', this.imgFile);
+  console.log(this.userCreateForm.value);
 
-    const data={...basic,...contact,...education,...profile};
-    console.log(data);
-    this.userService.createUser(data).subscribe(res =>{
-      console.log(res.data);
-      this.router.navigateByUrl('/user-list');
-    })
-    
-  // }
+  let param: any = {...this.userCreateForm.value};
+  console.log('param', param);
+  
+  let data = new FormData();
+  data.append('name', param.basic?.name);
+  data.append('email', param.basic?.email);
+  data.append('password', param.basic?.password);
+  data.append('birthday', param.contact?.birthday);
+  data.append('gender', param.contact?.gender);
+  data.append('address', param.contact?.address);
+  data.append('type', param.contact?.type);
+  data.append('phone', param.contact?.phone);
+  data.append('experience', param.education?.experience);
+  data.append('skill', param.education?.skill);
+  data.append('profile', this.imgFile);
+
+  this.userService.createUser(data).subscribe(res=>{
+    console.log(res);
+
+    this.router.navigateByUrl('/user-list');
+  })
   
 }
 

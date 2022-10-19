@@ -55,10 +55,10 @@ const findUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.findUserService = findUserService;
 const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(JSON.stringify(req.body.basic));
-        console.log(req.body.profile);
-        console.log(JSON.stringify(req.body.contact));
-        console.log(JSON.stringify(req.body.education));
+        // console.log(JSON.stringify(req.body.basic));
+        // console.log(req.body.profile);
+        // console.log(JSON.stringify(req.body.contact));
+        // console.log(JSON.stringify(req.body.education));
         const errors = (0, express_validator_1.validationResult)(req.body);
         if (!errors.isEmpty()) {
             const error = new Error("Validation failed!");
@@ -70,23 +70,27 @@ const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         if (req.file) {
             profile = req.file.path.replace("\\", "/");
         }
+        let basic = {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+        };
+        let contact = {
+            birthday: req.body.birthday,
+            gender: req.body.gender,
+            address: req.body.address,
+            type: req.body.type,
+            phone: req.body.phone
+        };
+        let education = {
+            skill: req.body.skill,
+            experience: req.body.experience
+        };
         const userTo = {
-            /* name: req.body.name,
-             email: req.body.email,
-             password: await bcrypt.hash(req.body.password, 12),
-             phone: req.body.phone,
-             birthday: req.body.birthday,
-             gender: req.body.gender,
-             address: req.body.address,
-             type: req.body.type,
-             skill: req.body.skill,
-             experience: req.body.experience,
-             profile: profile,
-             created_user_id: req.body.created_user_id,*/
-            basic: req.body.basic,
+            basic,
             profile: profile,
-            contact: req.body.contact,
-            education: req.body.education,
+            contact,
+            education,
             created_user_id: req.body.created_user_id,
         };
         const user = new User_1.default(userTo);
@@ -118,15 +122,35 @@ const updateUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
                 user.profile = profile;
             }
         }
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.phone = req.body.phone;
-        user.birthday = req.body.birthday;
-        user.gender = req.body.gender;
-        user.address = req.body.address;
-        user.type = req.body.type;
-        user.skill = req.body.skill;
-        user.experience = req.body.experience;
+        // let basic = {
+        //   name: req.body.name,
+        //   email: req.body.email,
+        //   password: req.body.password,
+        // };
+        // let contact = {
+        //   birthday: req.body.birthday,
+        //   gender: req.body.gender,
+        //   address: req.body.address,
+        //   type: req.body.type,
+        //   phone: req.body.phone
+        // };
+        // let education={
+        //   skill:req.body.skill,
+        //   experience:req.body.experience
+        // };
+        user.basic;
+        user.contact;
+        user.education;
+        // user.name = req.body.basic.name;
+        // user.email = req.body.basic.email;
+        // user.password = req.body.basic.password;
+        // user.phone = req.body.contact.phone;
+        // user.birthday = req.body.contact.birthday;
+        // user.gender = req.body.contact.gender;
+        // user.address = req.body.contact.address;
+        // user.type = req.body.contact.type;
+        // user.skill = req.body.education.skill;
+        // user.experience = req.body.education.experience;
         user.profile = profile;
         user.created_user_id = req.body.created_user_id;
         user.updated_user_id = req.body.updated_user_id;
