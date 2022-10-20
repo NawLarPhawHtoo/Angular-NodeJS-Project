@@ -5,6 +5,7 @@ import {
   createUserService,
   updateUserService,
   deleteUserService,
+  passwordChangeService
 } from "../services/user.service";
 
 export const getUsers = async (
@@ -46,3 +47,11 @@ export const deleteUser = async (
 ) => {
   deleteUserService(req, res, next);
 };
+
+export const passwordChange = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
+ passwordChangeService(req, res, next);
+}

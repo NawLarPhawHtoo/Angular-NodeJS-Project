@@ -32,6 +32,7 @@ export class UserEditComponent implements OnInit {
   basic: any;
   contact: any;
   education: any;
+ 
   // basic: any;
   // contact: any;
   // education: any;
@@ -43,7 +44,7 @@ export class UserEditComponent implements OnInit {
     public router: Router,
     public activateRoute: ActivatedRoute,
     public fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: UserEditComponent
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 
   typeOption = [{ enum: 'Admin' }, { enum: 'User' }];
@@ -69,18 +70,18 @@ export class UserEditComponent implements OnInit {
     { enum: '1 year above' },
   ];
 
-  profile = new FormControl('', Validators.required);
+  // profile = new FormControl('');
   // name = new FormControl('', Validators.required);
   // type = new FormControl('');
   // phone = new FormControl('');
   // email = new FormControl('', [Validators.required, Validators.email]);
   // birthday = new FormControl('');
   // gender=new FormControl('');
-  // address = new FormControl('');
+  // // address = new FormControl('');
   // basic=new FormControl('');
   // contact=new FormControl('');
   // education=new FormControl('');
-  isProfile = localStorage.getItem('isProfile');
+  // isProfile = localStorage.getItem('isProfile');
 
   formData!: FormGroup;
   // firstFormGroup!: FormGroup;
@@ -88,10 +89,13 @@ export class UserEditComponent implements OnInit {
 
   ngOnInit(): void {
     // const id: string = this.activateRoute.snapshot.params['id'];
-    
+  
     console.log(this.data);
     const id=this.data._id;
     console.log(id);
+
+ const profile=this.data.profile;
+ console.log(profile);
     const name=this.data.basic.name;
     console.log(name);
     const email=this.data.basic.email;
@@ -106,139 +110,81 @@ export class UserEditComponent implements OnInit {
     const skill=this.data.education.skill;
     const experience=this.data.education.experience;
 
-
-    this.profileImage = `http://localhost:8000/${this.data.profile}` || '';
-
     this.formData = this.fb.group({
-      profile: this.fb.control(this.imgFile),
+      profile:[this.data.profile],
 
       basic: this.fb.group({
-        name: this.fb.control(name),
-        email: this.fb.control(email),
-        password: this.fb.control(password),
+        name: [name],
+        email:[ email],
+        password:[password],
         // confirmPwd: this.fb.control('', Validators.required),
       }),
       contact: this.fb.group({
-        birthday: this.fb.control(birthday),
-        gender: this.fb.control(gender),
-        type: this.fb.control(type),
-        phone: this.fb.control(phone),
-        address: this.fb.control(address),
+        birthday: [birthday],
+        gender: [gender],
+        type:[ type],
+        phone: [phone],
+        address: [address],
       }),
       education: this.fb.group({
-        skill: this.fb.control(skill),
-        experience: this.fb.control(experience),
+        skill:skill,
+        experience: experience,
       }),
     });
 
-    // this.userService.findUser(id).subscribe(res=>{
-    //   console.log(res);
-    // })
-    // this.formData=new FormGroup({
-    //   name:new FormControl(this.data.basic.name),
-    //   email:new FormControl(this.data.basic.email),
-    //   password:new FormControl(this.data.basic.password),
-
-    //   birthday:new FormControl(this.data.contact.birthday),
-    //   gender:new FormControl(this.data.contact.gender),
-    //   type:new FormControl(this.data.contact.type),
-    //   phone:new FormControl(this.data.contact.phone),
-    //   address:new FormControl(this.data.contact.address),
-
-    //   skill:new FormControl(this.data.education.skill),
-    //   experience:new FormControl(this.data.education.experience),
-    // });
-
-    // this.userUpdateForm = new FormGroup({
-
-    // profile: new FormControl('')
-
-    // contact:this.fb.group({
-
-    //   name: this.fb.control('', Validators.required),
-    //   email: this.fb.control('', Validators.required),
-    //   password: this.fb.control('', Validators.required),
-    //   // confirmPwd: this.fb.control('', Validators.required),
-
-    // }),
-    // contact:this.fb.group({
-    //   birthday:this.fb.control(''),
-    //   gender: this.fb.control(''),
-    //   type: this.fb.control(''),
-    //   phone: this.fb.control(''),
-    //   address: this.fb.control(''),
-
-    // }),
-    // education:this.fb.group({
-    //   skill:this.fb.control('', Validators.required),
-    //   experience:this.fb.control('', Validators.required),
-    // }),
-
-    // basic:new FormControl(this.data.basic),
-    // contact:new FormControl(this.data.contact),
-    // education:new FormControl(this.data.education),
-    // name: new FormControl(this.data.name, Validators.required),
-    // type: new FormControl(this.data.type),
-    // phone: new FormControl(this.data.phone),
-    // email: new FormControl(this.data.email, [Validators.required, Validators.email]),
-    // birthday: new FormControl(this.data.birthday),
-    // gender: new FormControl(this.data.gender),
-    // address: new FormControl(this.data.address)
-    // });
   }
+  // userUpdateForm=this.fb.group({
+
+  //   profile: this.fb.control(this.profileImage),
+    
+  //   basic:this.fb.group({
+     
+  //     name: this.fb.control(''),
+  //     email: this.fb.control(''),
+  //     password: this.fb.control('', Validators.required),
+  //     // confirmPwd: this.fb.control('', Validators.required),
+      
+  //   }),
+  //   contact:this.fb.group({
+  //     birthday:this.fb.control(''),
+  //     gender: this.fb.control(''),
+  //     type: this.fb.control(''),
+  //     phone: this.fb.control(''),
+  //     address: this.fb.control(''),    
+
+  //   }),
+  //   education:this.fb.group({
+  //     skill:this.fb.control('', Validators.required),
+  //     experience:this.fb.control('', Validators.required),
+  //   }),
+  
+  // });
 
   onClickUpdateUser() {
     //   if (this.confirmView == true) {
     const id = this.data._id;
     console.log(id);
+    console.log(this.formData.value);
+
     const formData = new FormData();
-    formData.append('name', this.data.basic.name);
-    formData.append('email', this.data.basic.email);
-    formData.append('password', this.data.basic.password);
-    formData.append('birthday', this.data.contact.birthday);
-    formData.append('gender', this.data.contact.gender);
-    formData.append('address', this.data.contact.address);
-    formData.append('type', this.data.contact.type);
-    formData.append('phone', this.data.contact.phone);
-    formData.append('experience', this.data.education.experience);
-    formData.append('skill', this.data.education.skill);
-    formData.append('profile', this.data.imgFile);
+    
+    formData.append('name', this.formData.value.basic.name);
+    formData.append('email', this.formData.value.basic.email);
+    formData.append('password',  this.formData.value.basic.password);
+    formData.append('birthday',this.formData.value.contact.birthday);
+    formData.append('gender', this.formData.value.contact.gender);
+    formData.append('address', this.formData.value.contact.address);
+    formData.append('type', this.formData.value.contact.type);
+    formData.append('phone', this.formData.value.contact.phone);
+    formData.append('experience', this.formData.value.education.experience);
+    formData.append('skill', this.formData.value.education.skill);
+    this.imgFile && formData.append('profile', this.imgFile);
 
     this.userService.updateUser(id, formData).subscribe(res => {
       console.log(res);
-      this.router.navigateByUrl('/user-list');
+     this.dialogRef.close('update');
     });
   
-
-    // formData.append('profile', this.imgFile);
-
-    //  formData.append('name', this.formData.controls['name'].value);
-    //  formData.append('email', this.formData.controls['email'].value);
-    //  formData.append('password', this.formData.controls['password'].value);
-    //    formData.append('birthday',this.formData.controls['birthday'].value);
-    //    formData.append('gender', this.formData.controls['gender'].value);
-    //    formData.append('address',this.formData.controls['address'].value);
-    //    formData.append('type', this.formData.controls['type'].value);
-    //    formData.append('phone', this.formData.controls['phone'].value);
-    //    formData.append('experience', this.formData.controls['experience'].value);
-    //    formData.append('skill', this.formData.controls['skill'].value);
-
-    // formData.append('name', this.formData.controls['basic'].value);
-    // formData.append('type', this.formData.controls['contact'].value);
-    // formData.append('phone', this.formData.controls['contact'].value);
-    // formData.append('email', this.formData.controls['basic'].value);
-    // formData.append('birthday', this.formData.controls['contact'].value);
-    // formData.append('gender', this.formData.controls['contact'].value);
-    // formData.append('address', this.formData.controls['contact'].value);
-    // formData.append('basic', this.formData.controls['basic'].value);
-    // formData.append('contact', this.formData.controls['contact'].value);
-    // formData.append('education', this.formData.controls['education'].value);
-
-    // //   console.log(formData)
-    // this.userService.updateUser(id, formData).subscribe((res) => {
-    //   // this.dialogRef.close('update');
-    //   console.log(res);
-    // });
   }
 
   // if (this.formData.valid) {
@@ -284,34 +230,6 @@ export class UserEditComponent implements OnInit {
   get educationForm() {
     return this.formData.get('education') as FormGroup;
   }
-
-  // updateUser(){
-
-  //   console.log(this.userUpdateForm.value);
-
-  //   let param: any = {...this.userUpdateForm.value};
-  //   console.log('param', param);
-
-  //   let data = new FormData();
-  //   data.append('name', param.basic?.name);
-  //   data.append('email', param.basic?.email);
-  //   data.append('password', param.basic?.password);
-  //   data.append('birthday', param.contact?.birthday);
-  //   data.append('gender', param.contact?.gender);
-  //   data.append('address', param.contact?.address);
-  //   data.append('type', param.contact?.type);
-  //   data.append('phone', param.contact?.phone);
-  //   data.append('experience', param.education?.experience);
-  //   data.append('skill', param.education?.skill);
-  //   data.append('profile', this.imgFile);
-
-  //   this.userService.createUser(data).subscribe(res=>{
-  //     console.log(res);
-
-  //     this.router.navigateByUrl('/user-list');
-  //   })
-
-  // }
 
   imageUpload(event: any) {
     if (event.target.files && event.target.files[0]) {

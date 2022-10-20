@@ -21,4 +21,7 @@ router
 router
     .route("/delete/:id")
     .delete(user_controller_1.deleteUser);
+router
+    .route("/password-change/:id")
+    .post(user_controller_1.passwordChange);
 exports.default = router;

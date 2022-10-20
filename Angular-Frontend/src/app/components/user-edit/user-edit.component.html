@@ -69,7 +69,7 @@
           #file
           type="file"
           (change)="imageUpload($event)"
-          formControlName="profile"
+         
           accept="image/*"
           maxFileSize="2000000"
         />
@@ -106,7 +106,7 @@
             >Please enter your email</mat-error
           > -->
         </mat-form-field>
-        <mat-form-field appearance="fill" class="full-width">
+        <!-- <mat-form-field appearance="fill" class="full-width">
           <mat-label>Password</mat-label>
           <input
             type="text"
@@ -115,10 +115,10 @@
             formControlName="password"
             required
           />
-          <!-- <mat-error *ngIf="myForm['password'].hasError('required')"
+          <mat-error *ngIf="myForm['password'].hasError('required')"
             >Please enter your password</mat-error
-          > -->
-        </mat-form-field>
+          >
+        </mat-form-field> -->
         <div>
           <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
         </div>

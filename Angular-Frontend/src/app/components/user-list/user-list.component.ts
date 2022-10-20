@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit,AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  users: User[] | any = [];
+  users: User[] | any =[];
   console = console;
   displayedColumns: string[] = [
     'profile',

@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserService = exports.updateUserService = exports.createUserService = exports.findUserService = exports.getUserService = void 0;
+exports.passwordChangeService = exports.deleteUserService = exports.updateUserService = exports.createUserService = exports.findUserService = exports.getUserService = void 0;
 const express_validator_1 = require("express-validator");
 const User_1 = __importDefault(require("../models/User"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield User_1.default.find();
@@ -73,7 +74,8 @@ const createUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         let basic = {
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            // password: req.body.password
+            password: yield bcrypt_1.default.hash(req.body.password, 12)
         };
         let contact = {
             birthday: req.body.birthday,
@@ -122,35 +124,28 @@ const updateUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
                 user.profile = profile;
             }
         }
-        // let basic = {
-        //   name: req.body.name,
-        //   email: req.body.email,
-        //   password: req.body.password,
-        // };
-        // let contact = {
-        //   birthday: req.body.birthday,
-        //   gender: req.body.gender,
-        //   address: req.body.address,
-        //   type: req.body.type,
-        //   phone: req.body.phone
-        // };
-        // let education={
-        //   skill:req.body.skill,
-        //   experience:req.body.experience
-        // };
-        user.basic;
-        user.contact;
-        user.education;
-        // user.name = req.body.basic.name;
-        // user.email = req.body.basic.email;
-        // user.password = req.body.basic.password;
-        // user.phone = req.body.contact.phone;
-        // user.birthday = req.body.contact.birthday;
-        // user.gender = req.body.contact.gender;
-        // user.address = req.body.contact.address;
-        // user.type = req.body.contact.type;
-        // user.skill = req.body.education.skill;
-        // user.experience = req.body.education.experience;
+        let basic = {
+            name: req.body.name,
+            email: req.body.email,
+            // password: req.body.password,
+        };
+        let contact = {
+            birthday: req.body.birthday,
+            gender: req.body.gender,
+            address: req.body.address,
+            type: req.body.type,
+            phone: req.body.phone
+        };
+        let education = {
+            skill: req.body.skill,
+            experience: req.body.experience
+        };
+        user.basic = basic;
+        console.log(user.basic);
+        user.contact = contact;
+        console.log(user.contact);
+        user.education = education;
+        console.log(user.education);
         user.profile = profile;
         user.created_user_id = req.body.created_user_id;
         user.updated_user_id = req.body.updated_user_id;
@@ -184,3 +179,46 @@ const deleteUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.deleteUserService = deleteUserService;
+const passwordChangeService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.params.id);
+        const user = yield User_1.default.findById(req.params.id);
+        console.log(user);
+        const { oldPassword, newPassword, confirmPassword } = req.body;
+        console.log(oldPassword);
+        console.log(newPassword);
+        console.log(confirmPassword);
+        //Check required fields
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            res.json({ message: "Please fill in all fields." });
+        }
+        //Check passwords match
+        if (newPassword !== confirmPassword) {
+            res.json({ message: "New password do not match." });
+        }
+        else {
+            //Validation Passed
+            const isMatch = yield bcrypt_1.default.compare(oldPassword, user.basic.password);
+            console.log(user.basic.password);
+            console.log(isMatch);
+            if (isMatch) {
+                //Update password for user with new password
+                bcrypt_1.default.genSalt(12, (err, salt) => bcrypt_1.default.hash(newPassword, salt, (err, hash) => {
+                    if (err) {
+                        throw err;
+                    }
+                    user.password = hash;
+                    user.save();
+                }));
+                res.json({ message: "Password Successfully Updated!", data: user, status: 1 });
+            }
+            else {
+                res.json({ message: "Current Password is not match." });
+            }
+        }
+    }
+    catch (err) {
+        res.json({ message: "Password does not match" });
+    }
+});
+exports.passwordChangeService = passwordChangeService;

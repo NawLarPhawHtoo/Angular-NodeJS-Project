@@ -40,29 +40,33 @@ const bcrypt_1 = __importStar(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = __importDefault(require("../models/User"));
 const loginService = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    User_1.default.findOne({ email: req.body.email }).then((user) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    console.log(email);
+    console.log(password);
+    User_1.default.findOne({ email }).then((user) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(user);
         if (!user) {
             return res.status(401).send({
                 success: false,
-                message: "Could not find user"
+                message: 'Could not find user'
             });
         }
-        if (!(0, bcrypt_1.compareSync)(req.body.password, user.password)) {
+        if (!(0, bcrypt_1.compareSync)(password, user.password)) {
             return res.status(401).send({
                 success: false,
-                message: "Incorrect password"
+                message: 'Incorrect Password'
             });
         }
         const payload = {
             email: yield bcrypt_1.default.hash(user.email, 12),
             id: yield bcrypt_1.default.hash(user.id, 12)
         };
-        const token = jsonwebtoken_1.default.sign(payload, 'secret', { expiresIn: '1d' });
-        return res.status(200).json({
+        const token = jsonwebtoken_1.default.sign(payload, 'secrect', { expiresIn: '1d' });
+        return res.status(200).send({
             success: true,
-            token: token,
-            user: user,
-            message: "Login Successfully!"
+            message: 'Login Successfully!',
+            users: user,
+            token: token
         });
     }));
 });

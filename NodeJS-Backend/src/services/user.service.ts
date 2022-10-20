@@ -75,7 +75,8 @@ export const createUserService = async (
     let basic = {
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
+      // password: req.body.password
+      password:await bcrypt.hash(req.body.password, 12)
     };
 
     let contact = {
@@ -89,7 +90,7 @@ export const createUserService = async (
     let education={
       skill:req.body.skill,
       experience:req.body.experience
-    }
+    };
 
     const userTo :UserCreate= {
       basic,
@@ -131,37 +132,31 @@ export const updateUserService = async (
         user.profile = profile;
       }
     }
-    // let basic = {
-    //   name: req.body.name,
-    //   email: req.body.email,
-    //   password: req.body.password,
-    // };
+    let basic = {
+      name: req.body.name,
+      email: req.body.email,
+      // password: req.body.password,
+    };
 
-    // let contact = {
-    //   birthday: req.body.birthday,
-    //   gender: req.body.gender,
-    //   address: req.body.address,
-    //   type: req.body.type,
-    //   phone: req.body.phone
-    // };
+    let contact = {
+      birthday: req.body.birthday,
+      gender: req.body.gender,
+      address: req.body.address,
+      type: req.body.type,
+      phone: req.body.phone
+    };
 
-    // let education={
-    //   skill:req.body.skill,
-    //   experience:req.body.experience
-    // };
-      user.basic;
-      user.contact;
-      user.education;
-    // user.name = req.body.basic.name;
-    // user.email = req.body.basic.email;
-    // user.password = req.body.basic.password;
-    // user.phone = req.body.contact.phone;
-    // user.birthday = req.body.contact.birthday;
-    // user.gender = req.body.contact.gender;
-    // user.address = req.body.contact.address;
-    // user.type = req.body.contact.type;
-    // user.skill = req.body.education.skill;
-    // user.experience = req.body.education.experience;
+    let education={
+      skill:req.body.skill,
+      experience:req.body.experience
+    };
+      user.basic= basic;
+      console.log(user.basic);
+      user.contact= contact;
+      console.log(user.contact);
+      user.education= education;
+      console.log(user.education);  
+    
     user.profile = profile;
     user.created_user_id = req.body.created_user_id;
     user.updated_user_id = req.body.updated_user_id;
@@ -197,3 +192,51 @@ export const deleteUserService = async (
     next(err);
   }
 };
+
+
+export const passwordChangeService = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    console.log(req.params.id);
+  const user:any = await User.findById(req.params.id);
+  console.log(user);
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    console.log(oldPassword);
+    console.log(newPassword);
+    console.log(confirmPassword);
+
+    //Check required fields
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      res.json({ message: "Please fill in all fields." });
+    }
+    
+    //Check passwords match
+    if (newPassword !== confirmPassword) {
+      res.json({ message: "New password do not match." });
+    } else {
+      //Validation Passed
+      const isMatch = await bcrypt.compare(oldPassword, user.basic.password);
+      console.log(user.basic.password);
+      console.log(isMatch);
+        if (isMatch) {
+          //Update password for user with new password
+          bcrypt.genSalt(12, (err, salt) =>
+            bcrypt.hash(newPassword,salt, (err, hash) => {
+              if (err) {
+                throw err;
+              }
+              user.password = hash;
+              user.save(); 
+            })
+          );
+          res.json({ message: "Password Successfully Updated!", data: user, status: 1 });
+        
+        } else {
+          res.json({ message: "Current Password is not match." })
+          
+        }
+    }
+  } catch (err) {
+    res.json({ message: "Password does not match" });
+   
+  }
+}
