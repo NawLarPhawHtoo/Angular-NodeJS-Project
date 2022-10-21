@@ -10,8 +10,8 @@ export class AuthService {
 
   constructor(private http:HttpClient) { }
 
-  loginUrl="http://localhost:8000/api/login";
-  signupUrl="http://localhost:8000/api/signup";
+  loginUrl="http://localhost:8000/api";
+  signupUrl="http://localhost:8000/api";
 
   isUserLoggedIn:boolean = false;
 
@@ -20,7 +20,7 @@ export class AuthService {
       "email":email,
       "password":password
     }
-    return this.http.post(this.loginUrl,data)
+    return this.http.post(`${this.loginUrl}/login`,data)
       .pipe(retry(3), catchError(this.httpErrorHandler));
   }
 
@@ -30,7 +30,7 @@ export class AuthService {
     "email":email,
     "password":password
   }
-  return this.http.post(this.signupUrl,body)
+  return this.http.post(`${this.signupUrl}/signup`,body)
   .pipe(retry(3), catchError(this.httpErrorHandler));
  }
 

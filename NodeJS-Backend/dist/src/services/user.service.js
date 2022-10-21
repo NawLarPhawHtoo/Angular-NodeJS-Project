@@ -127,7 +127,7 @@ const updateUserService = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         let basic = {
             name: req.body.name,
             email: req.body.email,
-            // password: req.body.password,
+            password: yield bcrypt_1.default.hash(req.body.password, 12)
         };
         let contact = {
             birthday: req.body.birthday,

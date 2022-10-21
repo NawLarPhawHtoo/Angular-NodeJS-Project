@@ -11,8 +11,12 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const multer_1 = __importDefault(require("multer"));
 const uuid_1 = require("uuid");
+const passport_1 = __importDefault(require("passport"));
+require('./src/config/passport');
 const user_route_1 = __importDefault(require("./src/routes/user.route"));
 const auth_route_1 = __importDefault(require("./src/routes/auth.route"));
+const post_route_1 = __importDefault(require("./src/routes/post.route"));
+const category_route_1 = __importDefault(require("./src/routes/category.route"));
 dotenv_1.default.config();
 const fileStorage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
@@ -49,9 +53,11 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use((0, multer_1.default)({ storage: fileStorage, fileFilter }).single("profile"));
 app.use("/apiuploads", express_1.default.static("apiuploads"));
-// app.use('/',express.static(path.join(__dirname,'public')));
+app.use(passport_1.default.initialize());
 app.use('/api/users', user_route_1.default);
 app.use('/api', auth_route_1.default);
+app.use('/api/posts', post_route_1.default);
+app.use('/api/category', category_route_1.default);
 app.get('/', (req, res) => {
     res.send("/Hello Welcome");
 });

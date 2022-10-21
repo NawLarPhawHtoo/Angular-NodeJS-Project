@@ -47,7 +47,7 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
     UserDeleteConfirmDialogComponent,
     SignupComponent,
     SignupSuccessSnackbarComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
   ],
   imports: [
     BrowserModule,

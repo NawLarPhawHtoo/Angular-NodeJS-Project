@@ -6,8 +6,12 @@ import path from 'path';
 import dotenv from 'dotenv';
 import multer, { FileFilterCallback } from 'multer';
 import { v4} from 'uuid';
+import passport from "passport";
+require('./src/config/passport');
 import userRoute from './src/routes/user.route';
 import authRoute from './src/routes/auth.route';
+import postRoute from './src/routes/post.route';
+import categoryRoute from './src/routes/category.route';
 
 
 dotenv.config();
@@ -51,11 +55,13 @@ app.use(cors());
 app.use(express.static(path.join(__dirname,'public')));
 app.use(multer({ storage: fileStorage, fileFilter }).single("profile"));
 app.use("/apiuploads", express.static("apiuploads"));
-// app.use('/',express.static(path.join(__dirname,'public')));
+app.use(passport.initialize());
 
 
 app.use('/api/users',userRoute);
 app.use('/api',authRoute);
+app.use('/api/posts',postRoute);
+app.use('/api/category',categoryRoute);
 
 app.get('/', (req: Request, res: Response) => {
   res.send("/Hello Welcome");

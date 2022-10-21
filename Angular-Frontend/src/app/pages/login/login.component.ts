@@ -27,9 +27,12 @@ constructor(private authService:AuthService,private router:Router) { }
 
   onClickLogin(data:any){
     this.email=data.email;
+    console.log(this.email);
     this.password=data.password;
+    console.log(this.password);
 
     this.authService.login(this.email, this.password).subscribe((data:any)=>{
+      console.log(data);
       localStorage.setItem("isUserLoggedIn","true");
       localStorage.setItem("token",data.token);
       localStorage.setItem("loginUser",JSON.stringify(data.users));

@@ -135,7 +135,7 @@ export const updateUserService = async (
     let basic = {
       name: req.body.name,
       email: req.body.email,
-      // password: req.body.password,
+      password:await bcrypt.hash(req.body.password, 12)
     };
 
     let contact = {
